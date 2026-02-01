@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Pro Max Dashboard - Fast & Premium</title>
+    <title>3D Pro Max Dashboard - Final</title>
     <style>
         :root {
             --primary: #ffcc00;
@@ -14,152 +14,62 @@
             --accent-green: #10b981;
         }
 
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--bg-dark); 
-            color: var(--text-main); 
-            padding: 20px; 
-            margin: 0; 
-            display: flex;
-            justify-content: center;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-dark); color: var(--text-main); padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 900px; background: var(--card-bg); padding: 30px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
 
-        .container { 
-            width: 100%; 
-            max-width: 900px; 
-            background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 24px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4); 
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+        .tabs { display: flex; margin-bottom: 30px; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 5px; }
+        .tab-btn { flex: 1; padding: 14px; border: none; background: none; color: #94a3b8; font-weight: bold; cursor: pointer; border-radius: 10px; }
+        .tab-btn.active { background: var(--primary); color: #000; }
 
-        .tabs { 
-            display: flex; 
-            margin-bottom: 30px; 
-            background: rgba(0,0,0,0.2); 
-            border-radius: 12px; 
-            padding: 5px;
-        }
-        .tab-btn { 
-            flex: 1; 
-            padding: 14px; 
-            border: none; 
-            background: none; 
-            color: #94a3b8; 
-            font-weight: 600; 
-            cursor: pointer; 
-            border-radius: 10px;
-            transition: 0.3s;
-        }
-        .tab-btn.active { 
-            background: var(--primary); 
-            color: #000; 
-        }
-
-        .content { display: none; animation: fadeIn 0.4s ease; } 
+        .content { display: none; }
         .content.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .split-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .r-text { font-size: 28px; font-weight: 900; color: var(--primary); }
 
-        /* Split Row for R Input */
-        .split-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        .r-label { 
-            font-size: 32px; 
-            font-weight: 900; 
-            color: var(--accent-red); 
-            text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-        }
-
-        input { 
-            width: 100%; 
-            padding: 14px; 
-            box-sizing: border-box; 
-            background: #334155; 
-            border: 1px solid #475569; 
-            color: white; 
-            border-radius: 12px; 
-            font-size: 16px; 
-            outline: none;
-            transition: 0.3s;
-        }
+        input { width: 100%; padding: 14px; background: #334155; border: 1px solid #475569; color: white; border-radius: 12px; font-size: 16px; outline: none; }
         input:focus { border-color: var(--primary); }
 
-        .main-btn { 
-            width: 100%; 
-            padding: 15px; 
-            background: var(--primary); 
-            color: black; 
-            border: none; 
-            border-radius: 12px; 
-            font-weight: bold; 
-            font-size: 16px;
-            cursor: pointer; 
-            transition: 0.3s;
-        }
+        /* Refresh Button Green */
+        .refresh-btn { background: var(--accent-green) !important; color: white !important; margin-bottom: 20px; font-size: 18px; }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+        .main-btn { width: 100%; padding: 15px; background: var(--primary); color: black; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        .stat-box {
-            background: rgba(255,255,255,0.03);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-        }
+        .bet-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 768px) { .bet-layout { grid-template-columns: 1fr; } }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; border-radius: 12px; overflow: hidden; }
-        th, td { padding: 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        .progress-bg { background: #334155; border-radius: 10px; height: 6px; width: 100%; margin-top: 8px; overflow: hidden; }
+        .progress-bg { background: #334155; border-radius: 10px; height: 8px; width: 100%; margin-top: 5px; overflow: hidden; }
         .progress-fill { background: var(--accent-green); height: 100%; transition: 0.5s; }
         .limit-warning { background: var(--accent-red) !important; }
-
-        @media (min-width: 768px) {
-            .bet-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="tabs">
-        <button class="tab-btn active" onclick="openTab('bet-tab', event)">ဂဏန်းတင်ရန်</button>
+        <button class="tab-btn active" onclick="openTab('bet-tab', event)">ထိုးသား</button>
         <button class="tab-btn" onclick="openTab('admin-tab', event)">ဒိုင် (စာရင်းချုပ်)</button>
     </div>
 
     <div id="bet-tab" class="content active">
         <div class="bet-layout">
             <div>
-                <h2 style="margin-top:0">3D Betting</h2>
+                <h2>3D Betting</h2>
                 <div class="split-row">
-                    <input type="number" id="betNum" placeholder="ဂဏန်း (၃ လုံး)">
-                    <span class="r-label">R</span>
-                    <input type="number" id="rAmount" placeholder="R ပမာဏ" style="border-color: var(--accent-red);">
+                    <input type="number" id="betNum" placeholder="ဂဏန်း">
+                    <span class="r-text">R</span>
+                    <input type="number" id="rAmount" placeholder="R ပမာဏ">
                 </div>
-                <div style="margin-bottom:15px">
-                    <input type="number" id="straightAmount" placeholder="ဒဲ့ ပမာဏ">
-                </div>
-                <button class="main-btn" id="betBtn" onclick="processBet()">ထိုးမည်</button>
-                <p id="loadingMsg" style="text-align:center; color: var(--primary); display:none; margin-top: 10px;">စာရင်းပို့နေသည်... ခဏစောင့်ပါ</p>
+                <input type="number" id="straightAmount" placeholder="အဖြောင့် ပမာဏ" style="margin-bottom:15px">
+                <button class="main-btn" id="betBtn" onclick="processBet()">အမြန်ထိုးမည်</button>
             </div>
             <div>
-                <h3 style="font-size: 16px; color: #94a3b8; margin-top: 0;">လတ်တလောစာရင်း</h3>
-                <div style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.1); border-radius: 12px; padding: 10px;">
-                    <table>
-                        <thead><tr><th>ဂဏန်း</th><th>ပမာဏ</th><th>Status</th></tr></thead>
+                <h3 style="color:#94a3b8">လတ်တလောစာရင်း</h3>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table id="betTable">
                         <tbody id="betList"></tbody>
                     </table>
                 </div>
@@ -168,46 +78,13 @@
     </div>
 
     <div id="admin-tab" class="content">
-        <div id="login-section" style="max-width: 300px; margin: auto; text-align: center;">
-            <h2 style="margin-bottom: 20px;">Admin Login</h2>
-            <input type="password" id="adminPass" placeholder="Password" style="margin-bottom: 15px;">
-            <button class="main-btn" onclick="checkPass()">Login</button>
-        </div>
-
-        <div id="admin-content" style="display:none;">
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <label style="color:#94a3b8; font-size:13px;">စုစုပေါင်းရောင်းရငွေ</label>
-                    <div id="totalSales" style="font-size:28px; color:var(--accent-green); font-weight:bold; margin-top:5px;">0 Ks</div>
-                </div>
-                <div class="stat-box">
-                    <label style="color:#94a3b8; font-size:13px;">ပိတ်ဂဏန်း အရေအတွက်</label>
-                    <div id="closedCount" style="font-size:28px; color:var(--accent-red); font-weight:bold; margin-top:5px;">0</div>
-                </div>
-            </div>
-            
-            <div class="bet-layout">
-                <div style="background:rgba(0,0,0,0.2); padding:20px; border-radius:15px; margin-bottom: 20px;">
-                    <label style="color:var(--primary); font-weight: bold;">ဂဏန်းပိတ်ရန်</label>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <input type="number" id="closeNumInput" placeholder="ဥပမာ- 123">
-                        <button class="main-btn" style="background:var(--accent-red); color:white; width: 120px;" onclick="closeNumber()">ပိတ်မည်</button>
-                    </div>
-                    <div id="closedNumbersDisplay" style="margin-top:15px;"></div>
-                    <button onclick="resetClosed()" style="background:none; border:none; color:#64748b; font-size:12px; cursor:pointer; text-decoration:underline; width:100%; margin-top:15px;">အားလုံး ပြန်ဖွင့်မည်</button>
-                </div>
-
-                <div>
-                    <button class="main-btn" style="background:#334155; color:white;" onclick="loadDashboard()">🔄 Refresh </button>
-                    <div id="statList" style="max-height: 400px; overflow-y: auto;"></div>
-                </div>
-            </div>
-        </div>
+        <button class="main-btn refresh-btn" onclick="loadDashboard()">🔄 စာရင်းချုပ် Refresh လုပ်ရန်</button>
+        <div id="statList"></div>
     </div>
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzV1W9S5d_u7XWiY_w2I0Cmd9bXJmb5f-3k5nQr8ObaalH5mHPH9-hFtgEV6K0pDMM8Pw/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwLmQPwr-ev4P4XIWHFHlcPFrfUo73YPJZsSUNVrQ4N2JORA64bMtwgzcwE_mtHry4U3g/exec'; // အရေးကြီး
 
     function openTab(tabId, event) {
         document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
@@ -216,128 +93,61 @@
         event.currentTarget.classList.add('active');
     }
 
-    function checkPass() {
-        if(document.getElementById('adminPass').value === "12345") {
-            document.getElementById('login-section').style.display='none';
-            document.getElementById('admin-content').style.display='block';
-            loadDashboard();
-        } else { alert("စကားဝှက် မှားယွင်းနေပါသည်။"); }
-    }
-
-    // R အတွက် ဂဏန်းလှည့်ထုတ်ခြင်း
     function getPermutations(str) {
         if (str.length <= 1) return [str];
         let perms = [];
         for (let i = 0; i < str.length; i++) {
-            let char = str[i];
-            let remainingChars = str.slice(0, i) + str.slice(i + 1);
-            for (let sub of getPermutations(remainingChars)) {
-                perms.push(char + sub);
-            }
+            let char = str[i], rem = str.slice(0, i) + str.slice(i + 1);
+            for (let sub of getPermutations(rem)) perms.push(char + sub);
         }
         return [...new Set(perms)];
     }
 
-    // Fast Processing System
     async function processBet() {
         const num = document.getElementById('betNum').value;
-        const straightAmt = document.getElementById('straightAmount').value;
+        const sAmt = document.getElementById('straightAmount').value;
         const rAmt = document.getElementById('rAmount').value;
+        if (num.length !== 3) return alert("ဂဏန်း ၃ လုံးရိုက်ပါ");
+
         const btn = document.getElementById('betBtn');
-        const loader = document.getElementById('loadingMsg');
-
-        if (num.length !== 3) { alert("ဂဏန်း ၃ လုံး ရိုက်ပါ"); return; }
-        if (!straightAmt && !rAmt) { alert("ပမာဏ ထည့်ပါ"); return; }
-
-        btn.disabled = true;
-        loader.style.display = "block";
+        btn.disabled = true; btn.innerText = "ပို့နေသည်...";
 
         let tasks = [];
+        if (sAmt > 0) tasks.push(sendBet(num, sAmt, "Straight"));
+        if (rAmt > 0) getPermutations(num).forEach(n => tasks.push(sendBet(n, rAmt, "R")));
 
-        // ၁။ အဖြောင့် ထိုးခြင်း
-        if (straightAmt > 0) {
-            tasks.push(sendBet(num, straightAmt, "Straight"));
-        }
-
-        // ၂။ R အလှည့် ထိုးခြင်း
-        if (rAmt > 0) {
-            let rNumbers = getPermutations(num);
-            rNumbers.forEach(n => {
-                tasks.push(sendBet(n, rAmt, "R"));
-            });
-        }
-
-        // အားလုံးကို တစ်ပြိုင်နက် ပို့ခြင်း (Fast Action)
         await Promise.all(tasks);
-
-        btn.disabled = false;
-        loader.style.display = "none";
-        document.getElementById('betNum').value = "";
-        document.getElementById('straightAmount').value = "";
-        document.getElementById('rAmount').value = "";
+        btn.disabled = false; btn.innerText = "အမြန်ထိုးမည်";
+        document.getElementById('betNum').value = ""; document.getElementById('straightAmount').value = ""; document.getElementById('rAmount').value = "";
     }
 
     async function sendBet(n, amt, type) {
         try {
-            const res = await fetch(`${scriptURL}?num=${n}&amount=${amt}`);
+            const res = await fetch(`${scriptURL}?num=${n}&amount=${amt}&t=${Date.now()}`);
             const result = await res.text();
-            
-            let color = result === "SUCCESS" ? "var(--accent-green)" : "var(--accent-red)";
-            let icon = result === "SUCCESS" ? "✓" : "✖";
-            
-            const row = `<tr>
-                <td><b style="color:var(--primary)">${n}</b> <small style="color:#64748b">(${type})</small></td>
-                <td>${parseInt(amt).toLocaleString()} Ks</td>
-                <td style="color:${color}">${icon} ${result}</td>
-            </tr>`;
+            const color = result === "SUCCESS" ? "#10b981" : "#ef4444";
+            const row = `<tr><td><b>${n}</b> (${type})</td><td>${amt}</td><td style="color:${color}">${result}</td></tr>`;
             document.getElementById('betList').innerHTML = row + document.getElementById('betList').innerHTML;
-        } catch(e) { console.error("Error sending bet", n); }
+        } catch(e) { console.log(e); }
     }
 
     async function loadDashboard() {
-        const statDiv = document.getElementById('statList');
-        const closedDiv = document.getElementById('closedNumbersDisplay');
-        statDiv.innerHTML = "<p style='text-align:center; padding:20px;'>Data များရယူနေသည်...</p>";
-        
+        const div = document.getElementById('statList');
+        div.innerHTML = "Loading...";
         try {
-            const res = await fetch(`${scriptURL}?action=dashboard`);
+            const res = await fetch(`${scriptURL}?action=dashboard&t=${Date.now()}`);
             const data = await res.json();
-            document.getElementById('totalSales').innerText = data.total.toLocaleString() + " Ks";
-            document.getElementById('closedCount').innerText = data.closedNumbers.length;
-            closedDiv.innerHTML = data.closedNumbers.map(n => `<span style="background:var(--accent-red); padding:4px 8px; border-radius:5px; margin:2px; display:inline-block; font-size:12px;">${n}</span>`).join('');
-            
-            let html = "<table><thead><tr><th>ဂဏန်း</th><th>ပမာဏ / Limit</th></tr></thead><tbody>";
+            let html = "<table>";
             for(let n in data.topNumbers) {
-                let amt = data.topNumbers[n];
-                let percent = (amt / data.limit) * 100;
-                let colorClass = amt > (data.limit * 0.7) ? "limit-warning" : "";
-                html += `<tr><td><b>${n}</b></td><td>
-                    <div style="display:flex; justify-content:space-between; font-size:12px;"><span>${amt.toLocaleString()} Ks</span><span>${Math.round(percent)}%</span></div>
-                    <div class="progress-bg"><div class="progress-fill ${colorClass}" style="width:${percent}%"></div></div>
+                let amt = data.topNumbers[n], per = (amt/data.limit)*100;
+                html += `<tr><td><b>${n}</b></td><td style="width:70%">
+                    <div style="display:flex; justify-content:space-between; font-size:12px"><span>${amt} Ks</span><span>${Math.round(per)}%</span></div>
+                    <div class="progress-bg"><div class="progress-fill ${per > 80 ? 'limit-warning' : ''}" style="width:${per}%"></div></div>
                 </td></tr>`;
             }
-            statDiv.innerHTML = html + "</tbody></table>";
-        } catch(e) { statDiv.innerHTML = "<p>Data ဆွဲမရဖြစ်နေပါသည်။</p>"; }
-    }
-
-    async function closeNumber() {
-        const num = document.getElementById('closeNumInput').value;
-        if(num.length !== 3) return;
-        try {
-            await fetch(`${scriptURL}?action=closeNumber&num=${num}`);
-            document.getElementById('closeNumInput').value = "";
-            loadDashboard();
-        } catch(e) { alert("Error"); }
-    }
-
-    async function resetClosed() {
-        if(!confirm("ပိတ်ဂဏန်းအားလုံး ပြန်ဖွင့်မှာ သေချာပါသလား?")) return;
-        try {
-            await fetch(`${scriptURL}?action=resetClosed`);
-            loadDashboard();
-        } catch(e) { alert("Error"); }
+            div.innerHTML = html + "</table>";
+        } catch(e) { div.innerHTML = "Error!"; }
     }
 </script>
-
 </body>
 </html>
