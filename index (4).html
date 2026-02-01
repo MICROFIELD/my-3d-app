@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Pro Max Dashboard</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; padding: 15px; margin: 0; }
+        .container { width: 100%; max-width: 450px; background: #1e1e1e; padding: 20px; border-radius: 20px; margin: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .tabs { display: flex; margin-bottom: 20px; background: #2c2c2c; border-radius: 10px; overflow: hidden; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: none; color: #888; font-weight: bold; cursor: pointer; }
+        .tab-btn.active { background: #ffcc00; color: black; }
+        .content { display: none; } .content.active { display: block; }
+        input { width: 100%; padding: 12px; box-sizing: border-box; background: #333; border: 1px solid #444; color: white; border-radius: 8px; margin-bottom: 10px; font-size: 16px; }
+        .main-btn { width: 100%; padding: 14px; background: #ffcc00; color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+        .close-badge { display: inline-block; background: #ff4444; padding: 5px 10px; border-radius: 5px; margin: 3px; font-size: 14px; }
+        .progress-bg { background: #444; border-radius: 5px; height: 8px; width: 100%; margin-top: 5px; }
+        .progress-fill { background: #00ff00; height: 8px; border-radius: 5px; transition: 0.3s; }
+        .limit-warning { background: #ff4444 !important; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; border-bottom: 1px solid #333; text-align: left; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab('bet-tab')">ထိုးသား</button>
+        <button class="tab-btn" onclick="openTab('admin-tab')">ဒိုင် (စာရင်း)</button>
+    </div>
+
+    <div id="bet-tab" class="content active">
+        <h2>3D Betting</h2>
+        <input type="number" id="betNum" placeholder="ဂဏန်း (၃ လုံး)">
+        <input type="number" id="betAmount" placeholder="ထိုးကြေး">
+        <button class="main-btn" id="betBtn" onclick="addBet()">ထိုးမည်</button>
+        <table id="betTable"><thead><tr><th>ဂဏန်း</th><th>ပမာဏ</th><th>အခြေအနေ</th></tr></thead><tbody id="betList"></tbody></table>
+    </div>
+
+    <div id="admin-tab" class="content">
+        <div id="login-section">
+            <input type="password" id="adminPass" placeholder="Admin Password">
+            <button class="main-btn" onclick="checkPass()">Login</button>
+        </div>
+        <div id="admin-content" style="display:none;">
+            <div style="background:#2c2c2c; padding:15px; border-radius:10px; text-align:center; margin-bottom:15px; border: 1px solid #00ff00;">
+                <label style="color:#aaa; font-size:12px;">စုစုပေါင်းရောင်းရငွေ</label>
+                <div id="totalSales" style="font-size:24px; color:#00ff00; font-weight:bold;">0 Ks</div>
+            </div>
+            
+            <div style="background:#262626; padding:15px; border-radius:10px; margin-bottom:15px;">
+                <label style="color:#ffcc00;">ဂဏန်းပိတ်ရန်</label>
+                <input type="number" id="closeNumInput" placeholder="ဂဏန်းရိုက်ပါ">
+                <button class="main-btn" style="background:#ff4444; color:white;" onclick="closeNumber()">ဂဏန်းပိတ်မည်</button>
+                <div id="closedNumbersDisplay" style="margin-top:10px;"></div>
+                <button onclick="resetClosed()" style="background:none; border:none; color:#777; font-size:12px; cursor:pointer; text-decoration:underline; width:100%; margin-top:10px;">ပိတ်ဂဏန်းများအားလုံး ပြန်ဖွင့်မည်</button>
+            </div>
+
+            <button class="main-btn" onclick="loadDashboard()">စာရင်းချုပ် Refresh</button>
+            <div id="statList"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzHjTcIKCD0f4fndPXdcC_gXjeDv4utQZPgetqQDN7xyWps_X27TcKbEowZ1O8MTT6m-g/exec';
+
+    function openTab(tabId) {
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function checkPass() {
+        if(document.getElementById('adminPass').value === "12345") {
+            document.getElementById('login-section').style.display='none';
+            document.getElementById('admin-content').style.display='block';
+            loadDashboard();
+        } else { alert("မှားနေသည်"); }
+    }
+
+    async function addBet() {
+        const num = document.getElementById('betNum').value;
+        const amount = document.getElementById('betAmount').value;
+        const btn = document.getElementById('betBtn');
+        if(num.length !== 3 || !amount) { alert("မှန်အောင်ဖြည့်ပါ"); return; }
+        btn.disabled = true; btn.innerText = "စစ်ဆေးနေသည်...";
+        try {
+            const res = await fetch(`${scriptURL}?num=${num}&amount=${amount}`);
+            const result = await res.text();
+            if(result === "SUCCESS") {
+                alert("အောင်မြင်သည်");
+                document.getElementById('betNum').value = ""; document.getElementById('betAmount').value = "";
+                const row = `<tr><td>${num}</td><td>${amount}</td><td style="color:green">Success</td></tr>`;
+                document.getElementById('betList').innerHTML = row + document.getElementById('betList').innerHTML;
+            } else if(result.startsWith("LIMIT:")) {
+                alert("Limit မလောက်တော့ပါ။ ကျန်ရှိငွေ: " + result.split(":")[1]);
+            } else if(result === "CLOSED") { alert("ဤဂဏန်းမှာ ပိတ်ထားပါသည်။"); }
+        } catch(e) { alert("Error"); }
+        btn.disabled = false; btn.innerText = "ထိုးမည်";
+    }
+
+    async function loadDashboard() {
+        const statDiv = document.getElementById('statList');
+        const closedDiv = document.getElementById('closedNumbersDisplay');
+        statDiv.innerHTML = "Loading...";
+        try {
+            const res = await fetch(`${scriptURL}?action=dashboard`);
+            const data = await res.json();
+            document.getElementById('totalSales').innerText = data.total.toLocaleString() + " Ks";
+            
+            // ပိတ်ဂဏန်းများ ပြသခြင်း
+            closedDiv.innerHTML = data.closedNumbers.map(n => `<span class="close-badge">${n}</span>`).join('');
+            
+            let html = "<table><thead><tr><th>ဂဏန်း</th><th>ပမာဏ</th></tr></thead><tbody>";
+            for(let n in data.topNumbers) {
+                let amt = data.topNumbers[n];
+                let percent = (amt / data.limit) * 100;
+                let colorClass = amt > (data.limit * 0.4) ? "limit-warning" : "";
+                html += `<tr><td><b>${n}</b></td><td>${amt.toLocaleString()} Ks
+                        <div class="progress-bg"><div class="progress-fill ${colorClass}" style="width:${percent}%"></div></div>
+                        </td></tr>`;
+            }
+            statDiv.innerHTML = html + "</tbody></table>";
+        } catch(e) { statDiv.innerHTML = "Error loading data"; }
+    }
+
+    async function closeNumber() {
+        const num = document.getElementById('closeNumInput').value;
+        if(num.length !== 3) return;
+        try {
+            await fetch(`${scriptURL}?action=closeNumber&num=${num}`);
+            alert(num + " ပိတ်လိုက်ပါပြီ");
+            document.getElementById('closeNumInput').value = "";
+            loadDashboard();
+        } catch(e) { alert("Error"); }
+    }
+
+    async function resetClosed() {
+        if(!confirm("ပိတ်ဂဏန်းများအားလုံးကို ပြန်ဖွင့်မှာ သေချာပါသလား?")) return;
+        try {
+            await fetch(`${scriptURL}?action=resetClosed`);
+            alert("ပိတ်ဂဏန်းများအားလုံး ပြန်ဖွင့်ပေးပြီးပါပြီ");
+            loadDashboard();
+        } catch(e) { alert("Error"); }
+    }
+</script>
+</body>
+</html>
